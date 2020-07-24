@@ -64,9 +64,8 @@ namespace OpenGL
 
         public static Vector3 operator *(Matrix4 m1, Vector3 v)
         {
-            return new Vector3(m1[0].X * v.X + m1[0].Y * v.Y + m1[0].Z * v.Z,
-                m1[1].X * v.X + m1[1].Y * v.Y + m1[1].Z * v.Z,
-                m1[2].X * v.X + m1[2].Y * v.Y + m1[2].Z * v.Z);
+            Vector4 v4 = new Vector4(v, 0.0f);
+            return new Vector3(Vector4.Dot(m1.row1, v4), Vector4.Dot(m1.row2, v4), Vector4.Dot(m1.row3, v4));
         }
 
         public static Vector3 operator *(Vector3 v, Matrix4 m1)
