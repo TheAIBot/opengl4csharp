@@ -169,6 +169,23 @@ namespace OpenGL.Platform
 
                 VerticalSync = verticalSync;
             }
+            else if (Compatibility.IsLinux())
+            {           
+                if (Gl.IsGLXExtensionSupported("GLX_EXT_swap_control"))
+                {
+                    IntPtr address = Gl.GetAddress("glXSwapIntervalEXT");
+                    if (address != IntPtr.Zero && address != (IntPtr)1 && address != (IntPtr)2)
+                    {
+                        NativeMethods.glXSwapInterval = Marshal.GetDelegateForFunctionPointer<NativeMethods.glXSwapIntervalEXT>(address);
+
+                        IntPtr display = Gl.GetDisplay();
+                        IntPtr drawable = Gl.GetDrawable();
+                        NativeMethods.glXSwapInterval.Invoke(display, drawable, verticalSync ? 1 : 0);                        
+
+                        VerticalSync = verticalSync;   
+                    }
+                }              
+            }
             else VerticalSync = false;
         }
         #endregion

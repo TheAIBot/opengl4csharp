@@ -8,8 +8,8 @@ namespace OpenGL
     public partial class Gl
     {
         #region Fields
-        //internal const string Library = "libGL.so.1";	// linux
-        internal const string Library = "opengl32.dll";	// mac os x and windows
+        internal const string Library = "libGL.so.1";	// linux
+        //internal const string Library = "opengl32.dll";	// mac os x and windows
 
         private static Type delegatesClass;
         private static Type coreClass;
@@ -189,7 +189,16 @@ namespace OpenGL
             internal static extern IntPtr wglGetProcAddress(string lpszProc);
 
             [DllImport(Library, EntryPoint = "glXGetProcAddress")]
-            internal static extern IntPtr glxGetProcAddress([MarshalAs(UnmanagedType.LPTStr)] string procName);
+            internal static extern IntPtr glxGetProcAddress(string procName);
+
+            [DllImport(Library, EntryPoint = "glXGetCurrentDisplay", ExactSpelling = true)]
+            internal static extern IntPtr glXGetCurrentDisplay();
+                        
+            [DllImport(Library, EntryPoint = "glXGetCurrentDrawable", ExactSpelling = true)]
+            internal static extern IntPtr glXGetCurrentDrawable();
+            
+            [DllImport(Library, EntryPoint = "glXQueryExtensionsString", ExactSpelling = true)]
+            internal static extern string glXQueryExtensionsString(IntPtr display, int screen);
 
             [DllImport("libdl.dylib", EntryPoint = "NSIsSymbolNameDefined")]
             internal static extern bool NSIsSymbolNameDefined(string s);
@@ -280,6 +289,31 @@ namespace OpenGL
             }
 
             return getProcAddress.GetProcAddress(function);
+        }
+
+        public static IntPtr GetDisplay()
+        {
+            return NativeMethods.glXGetCurrentDisplay();
+        }
+
+        public static IntPtr GetDrawable()
+        {
+            return NativeMethods.glXGetCurrentDrawable();
+        }
+
+        private static HashSet<string> supportedExtensions = null;
+
+        public static bool IsGLXExtensionSupported(string function)
+        {
+            if (supportedExtensions == null)
+            {
+                IntPtr display = NativeMethods.glXGetCurrentDisplay();
+
+                // Defaulting to screen 0 for now.
+                string extensions = NativeMethods.glXQueryExtensionsString(display, 0);
+                supportedExtensions = new HashSet<string>(extensions.Split(' '));
+            }
+            return supportedExtensions.Contains(function);
         }
         #endregion
     }

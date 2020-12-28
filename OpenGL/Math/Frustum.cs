@@ -90,6 +90,31 @@ namespace OpenGL
             }
             return true;
         }
+
+        /// <summary>
+        /// True if the BoundingCircle is in (or partially in) the Frustum.
+        /// </summary>
+        /// <param name="box">BoundingCircle to check.</param>
+        /// <returns>True if an intersection exists.</returns>
+        public bool Intersects(BoundingCircle circle)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                Plane p = planes[i];
+
+                float dist = p.Normal.Dot(circle.Center) + p.D;
+                if (dist < -circle.Radius)
+                {
+                    return false;
+                }
+                else if (MathF.Abs(dist) < circle.Radius)
+                {
+                    return true;
+                }
+                           
+            }
+            return true;
+        }
         #endregion
     }
 }

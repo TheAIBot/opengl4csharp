@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <PackageId>Giawa.OpenGL.Platform</PackageId>
     <PackageVersion>0.1.5</PackageVersion>
     <Authors>Giawa</Authors>
@@ -14,13 +14,9 @@
     <PackageProjectUrl>https://www.github.com/giawa/opengl4csharp</PackageProjectUrl>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="System.Threading.Thread" Version="4.0.0"></PackageReference>
-    <PackageReference Include="Giawa.OpenGL" Version="0.1.5"></PackageReference>
+    <ProjectReference Include="..\OpenGL\OpenGL.csproj" />
   </ItemGroup>
 
 </Project>

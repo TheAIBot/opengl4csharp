@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace OpenGL.Platform
 {
@@ -16,9 +17,11 @@ namespace OpenGL.Platform
 
         public delegate void CGSetLocalEventsDelegate(double seconds);
         public delegate bool wglSwapIntervalEXT(int interval);
+        public delegate void glXSwapIntervalEXT(IntPtr display, IntPtr drawable, int interval);
 
         public static CGSetLocalEventsDelegate CGSetLocalEventsDelegateOSIndependent;
         public static wglSwapIntervalEXT wglSwapInterval;
+        public static glXSwapIntervalEXT glXSwapInterval;
         #endregion
 
         #region Public Methods
